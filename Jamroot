@@ -1,0 +1,48 @@
+# (c) Copyright 2011-2014 Felipe Magno de Almeida
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+import feature ;
+
+feature.feature middleware-integration-boost-exception : on off : composite link-incompatible ;
+feature.compose <middleware-integration-boost-exception>off
+ : <define>GNTL_NO_BOOST_EXCEPTION
+   <define>BOOST_EXCEPTION_DISABLE
+ ;
+
+project lg-api-surfaces-integration ;
+
+lib lg-api-surfaces-integration : src/graphics.cpp src/input.cpp 
+ src/lifetime.cpp src/sections.cpp src/applications.cpp src/dsmcc.cpp
+ src/callback.cpp src/ncl.cpp src/players.cpp
+ src/lua/lua_player.cpp src/lua/canvas.cpp src/lua/events.cpp
+ src/lua/io.cpp
+ /middleware-api//middleware-api /gts//gts /boost//headers
+ /gntl//gntl /libxml//libxml /lua//lua
+ /boost//thread /boost//system /boost//chrono
+ /luabind//luabind
+ : <include>include
+   <cflags>-fvisibility=hidden
+   <linkflags>-fvisibility=hidden
+   <cflags>"\'-DMIDDLEWARE_API_MIDDLEWARE_DECL=__attribute__((visibility (\"default\")))\'"
+   <cflags>"\'-DMIDDLEWARE_API_MANUFACTURER_DECL=__attribute__((visibility (\"default\")))\'"
+   <cflags>-fvisibility=hidden
+   <linkflags>-fvisibility=hidden
+ : <middleware-integration-boost-exception>off
+ : <cflags>"\'-DMIDDLEWARE_API_MIDDLEWARE_DECL=__attribute__((visibility (\"default\")))\'"
+   <cflags>"\'-DMIDDLEWARE_API_MANUFACTURER_DECL=__attribute__((visibility (\"default\")))\'"
+   <cflags>-fvisibility=hidden
+   <linkflags>-fvisibility=hidden
+ ;
+
